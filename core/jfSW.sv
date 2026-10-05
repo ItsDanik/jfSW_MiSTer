@@ -56,6 +56,12 @@ localparam CONF_STR = {
 	"O[4:2],Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;",
 	"O[6:5],Stereo Mix,None,25%,50%,100%;",
 	"-;",
+	// The game's options, read in jfsw/src/mister_port.c
+	"O[24],Resolution,320x200,640x200;",
+	"O[27:25],L. Stick Sensitivity,100%,125%,150%,200%,300%,25%,50%,75%;",
+	"O[30:28],R. Stick Sensitivity,100%,125%,150%,200%,300%,25%,50%,75%;",
+	"O[32:31],Limit Vertical Look,Off,Half,Third,Quarter;",
+	"-;",
 	"O[19:16],Menu OK,MiSTer,A,B,X,Y,L,R,Select,Start;",
 	"O[23:20],Menu Back,MiSTer,A,B,X,Y,L,R,Select,Start;",
 	"-;",

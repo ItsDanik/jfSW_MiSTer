@@ -18,3 +18,6 @@
 - Music: the CD tracks as `Track02.ogg`..`Track14.ogg` through libvorbis (`tools/vorbis.sh`, built into the SDL prefix). No MIDI synthesizer, so the shareware version has no music.
 - Data lookup: the game folder, plus `addons/`, `music/` and `classic/MUSIC/` in it (the layout of Shadow Warrior Classic Redux). Settings and saves are written to the game folder.
 - `MISTER_HYBRID_STATS=1` in the environment makes the game print how many fields went by without a new frame, every 600 fields.
+- OSD game options (status bits, read in `jfsw/src/mister_port.c`): Resolution `[24]`, L. Stick Sensitivity `[27:25]`, R. Stick Sensitivity `[30:28]`, Limit Vertical Look `[32:31]`. `MiSTer_UpdateOptions()` (`draw.c`) applies resolution and sensitivity once per frame from the loops of `RunLevel()` and `MenuLevel()`; the look limit is in `DoPlayerHorizon()` (`player.c`) and is not applied to demos.
+- 640x200: the engine takes the pixel shape from the mode (`pixelaspect` in `jfbuild/src/engine.c`, `MISTER_HYBRID`), since the core shows both modes on a 4:3 screen.
+- Main_MiSTer keeps the OSD status as raw bytes in `/media/fat/config/jfSW.CFG`; writing that file before loading the core sets options for a test without the OSD.

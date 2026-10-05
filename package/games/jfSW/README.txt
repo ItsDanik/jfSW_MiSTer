@@ -2,9 +2,8 @@ jfSW for MiSTer - Shadow Warrior as a hybrid core
 ====================================================
 
 The game (JFShadowWarrior, Jonathon Fowler's port of 3D Realms' Shadow
-Warrior) runs on the MiSTer's ARM CPU; the jfSW
-FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200, audio
-and input.
+Warrior) runs on the MiSTer's ARM CPU; the jfSW FPGA core provides native
+15kHz video (CRT, VGA and HDMI) at 320x200 or 640x200, audio and input.
 
 Requirements
   - danik_hybrid_cores, the launcher that comes with this release
@@ -39,6 +38,23 @@ Install
 
 OSD options
   Aspect ratio, Scale, Scandoubler Fx, Stereo Mix as in other cores.
+  Resolution    what the game renders and the core puts out, always at
+                15kHz: 320x200 (default, as the original) or 640x200, the
+                same 200 lines with twice the detail across. The picture
+                has the same size and shape on the screen. Applies at once
+                in the game and its menu.
+  L. Stick Sensitivity, R. Stick Sensitivity
+                how fast the gamepad's left stick (walk, strafe) and right
+                stick (turn, look) move the player, 25% to 300%. They
+                multiply the scale of each axis set in the game's own menu
+                and apply at once.
+  Limit Vertical Look
+                how far the view tilts up and down. The Build engine
+                shifts the picture instead of turning the camera, which
+                distorts it the further you look up or down. Off (default)
+                is the game's own range; Half, Third and Quarter leave
+                that part of it in both directions, for the keys, the
+                mouse and the gamepad alike.
   Menu OK, Menu Back
                 the gamepad button that confirms / goes back in the game's
                 menus, whatever it does in the game. MiSTer (default) uses
