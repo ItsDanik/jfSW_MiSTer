@@ -1,0 +1,8 @@
+[submodule "hybrid"]
+	path = hybrid
+	url = https://github.com/ItsDanik/Hybrid_MiSTer.git
+	branch = main
+[submodule "jfsw"]
+	path = jfsw
+	url = https://github.com/ItsDanik/jfsw.git
+	branch = mister

@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# jfSW (Shadow Warrior) launcher. danik_hybrid_cores (Scripts/danik_hybrid_cores.sh)
+# runs it when the jfSW core is loaded and stops it, with SIGTERM to the
+# process group, when another core is loaded.
+#
+# Laid out after the per-core handlers of MiSTer Frontier by MiSTer Organize
+# (https://github.com/MiSTerOrganize/MiSTer_Frontier, GPL-3.0), with thanks
+# for the inspiration. Licensed under the GPL-3.0.
+
+CORE="jfSW"
+GAMEDIR="/media/fat/games/$CORE"
+LOGDIR="/media/fat/logs/$CORE"
+LOG="$LOGDIR/jfsw.log"
+
+cd "$GAMEDIR" || exit 1
+mkdir -p "$LOGDIR"
+
+# Only once
+exec 9> /tmp/jfsw.lock
+flock -n 9 || exit 0
+
+# Development: keep the core loaded without starting the game
+[ -f /tmp/jfsw_nolaunch ] && exit 0
+
+# FPGA settle after the core was just loaded
+sleep 1
+
+mv -f "$LOG" "$LOGDIR/jfsw.prev.log" 2>/dev/null
+
+# For the hybrid core drivers in the binary: which core to attach to and its
+# default button mapping ("jn" in core/jfSW.sv)
+export MISTER_HYBRID_CORE="$CORE"
+export MISTER_HYBRID_JN="R,B,A,L,Y,X,Select,Start"
+# Everything the game writes stays in its folder
+export HOME="$GAMEDIR"
+export XDG_CONFIG_HOME="$GAMEDIR/config"
+export XDG_DATA_HOME="$GAMEDIR/config"
+
+# Both CPUs: the game takes CPU0 (better DDR3 bandwidth, Main_MiSTer lives on
+# CPU1) and runs audio and the frame copy on CPU1. Everything else on the
+# MiSTer (scripts, daemons, interrupts) lands on CPU0 as well: without the
+# higher priority the game waits for it a quarter of the time and misses fields.
+# Exit code 42: the player quit a game picked from a list (MH_UI_Menu), start
+# again to show the list.
+GAME=
+# The game must not outlive us: on SIGTERM it saves its settings and quits
+trap '[ -n "$GAME" ] && kill "$GAME" 2>/dev/null; exit 0' TERM INT
+while :; do
+    # The game data is looked for in this folder; the settings (sw.cfg) and
+    # the saved games (game*.sav) are written to it
+    nice -n -20 taskset 0x03 ./jfSW >> "$LOG" 2>&1 &
+    GAME=$!
+    wait "$GAME"
+    [ $? -eq 42 ] || break
+done
+GAME=
+
+# Back to the MiSTer menu, unless another core was loaded meanwhile
+if grep -q "^$CORE" /tmp/CORENAME 2>/dev/null; then
+    echo "load_core /media/fat/menu.rbf" > /dev/MiSTer_cmd
+fi
