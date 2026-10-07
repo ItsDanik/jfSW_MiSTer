@@ -3,7 +3,10 @@ jfSW for MiSTer - Shadow Warrior as a hybrid core
 
 The game (JFShadowWarrior, Jonathon Fowler's port of 3D Realms' Shadow
 Warrior) runs on the MiSTer's ARM CPU; the jfSW FPGA core provides native
-15kHz video (CRT, VGA and HDMI) at 320x200 or 640x200, audio and input.
+15kHz video (CRT, VGA and HDMI) at 320x200, 640x200, 320x240 or 640x240,
+audio and input.
+
+Disclaimer: AI is being used to speed up development of this project.
 
 Requirements
   - danik_hybrid_cores, the launcher that comes with this release
@@ -12,7 +15,7 @@ Requirements
     the core is loaded, keeps running after a reboot, and serves all our
     hybrid cores. Every hybrid core brings the launcher along and the
     newest version is the one that runs, so it never has to be run again
-    after an update. Without it the core only shows colour bars.
+    after an update. Without it the core only shows the MiSTer logo.
   - Game data. It is not included: SW.GRP of Shadow Warrior 1.2, from the
     original CD or from Shadow Warrior Classic Complete / Classic Redux
     (GOG, Steam), or of the shareware version. The addons Wanton
@@ -38,23 +41,39 @@ Install
 
 OSD options
   Aspect ratio, Scale, Scandoubler Fx, Stereo Mix as in other cores.
+  HDMI Only     Yes if no CRT is connected: resolutions of 640x400 and
+                more are then progressive instead of interlaced, and the
+                analog output is switched off while one is shown, so that a
+                15kHz screen can never get such a signal. This game has no
+                such resolution, so nothing changes. Not there with
+                direct_video=1.
+  CRT Options   for a 15kHz screen: Horizontal Size, Horizontal Pos and
+                Vertical Pos fit the picture to it. The pixels stay as they
+                are; HDMI is not affected. Not there with
+                forced_scandoubler=1.
   Resolution    what the game renders and the core puts out, always at
-                15kHz: 320x200 (default, as the original) or 640x200, the
-                same 200 lines with twice the detail across. The picture
-                has the same size and shape on the screen. Applies at once
-                in the game and its menu.
+                15kHz: 320x200 (default, as the original), 640x200,
+                320x240 or 640x240. 640 across is twice the detail in the
+                same place. 240 lines are square pixels at 320 across:
+                the 3D view gets a fifth more lines, while everything
+                that was drawn for 200 lines keeps its pixels. Menus and
+                full screen pictures are in the middle of the screen with
+                20 black lines above and below, the status bar and the
+                weapon are at the bottom, never stretched.
+                Applies at once in the game and its menu.
   L. Stick Sensitivity, R. Stick Sensitivity
                 how fast the gamepad's left stick (walk, strafe) and right
-                stick (turn, look) move the player, 25% to 300%. They
-                multiply the scale of each axis set in the game's own menu
-                and apply at once.
+                stick (turn, look) move the player, 25% to 300%. At 100% a
+                full tilt walks and turns about as fast as the keys do
+                when running. They apply at once and take the place of
+                the axis scale in the game's own menu.
   Limit Vertical Look
                 how far the view tilts up and down. The Build engine
                 shifts the picture instead of turning the camera, which
                 distorts it the further you look up or down. Off (default)
-                is the game's own range; Half, Third and Quarter leave
-                that part of it in both directions, for the keys, the
-                mouse and the gamepad alike.
+                is the game's own range; On leaves half of it in both
+                directions, for the keys, the mouse and the gamepad
+                alike.
   Menu OK, Menu Back
                 the gamepad button that confirms / goes back in the game's
                 menus, whatever it does in the game. MiSTer (default) uses
@@ -64,6 +83,7 @@ Controls
   Keyboard and mouse:
     Up, down                            Walk forward, back
     Left, right (or mouse)              Turn
+    Mouse up, down                      Look up, down
     Alt (or right mouse button)         Strafe: hold to sidestep with
                                         left and right (, and . sidestep
                                         directly)
@@ -78,8 +98,8 @@ Controls
     Tab                                 Map
     Esc                                 Menu
     These are the keys of the original game. "Options" in the game's
-    menu changes keys, mouse and gamepad assignments and has the mouse
-    aiming switch; they are saved in sw.cfg.
+    menu changes keys, mouse and gamepad assignments; they are saved in
+    sw.cfg.
   Gamepad (default mapping):
     Left stick                          Walk and strafe
     Right stick                         Turn, look up and down

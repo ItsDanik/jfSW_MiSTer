@@ -2,13 +2,15 @@
 
 Shadow Warrior on [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) as a hybrid core.
 
-The game is [JFShadowWarrior](https://github.com/jonof/jfsw), Jonathon Fowler's port of 3D Realms' Shadow Warrior (1997) on his port of Ken Silverman's Build engine, with the engine's classic software renderer. It runs on the MiSTer's ARM CPU. The jfSW FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200 or 640x200, 44.1kHz audio and keyboard, mouse and gamepad input. The two halves talk through shared DDR3 memory.
+The game is [JFShadowWarrior](https://github.com/jonof/jfsw), Jonathon Fowler's port of 3D Realms' Shadow Warrior (1997) on his port of Ken Silverman's Build engine, with the engine's classic software renderer. It runs on the MiSTer's ARM CPU. The jfSW FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200, 640x200, 320x240 or 640x240, 44.1kHz audio and keyboard, mouse and gamepad input. The two halves talk through shared DDR3 memory.
 
 > **Beta.** Expect rough edges and please report problems in the issues.
 
+Disclaimer: AI is being used to speed up development of this project.
+
 ## Requirements
 
-- **danik_hybrid_cores**, the launcher that comes in the release zip (`Scripts/danik_hybrid_cores.sh`): run it **once** from the MiSTer's `Scripts` menu. It starts the game whenever the core is loaded, keeps running after a reboot, and serves all our hybrid cores. Every hybrid core brings the launcher along and the newest version is the one that runs, so it never has to be run again after an update. Without it the core only shows colour bars.
+- **danik_hybrid_cores**, the launcher that comes in the release zip (`Scripts/danik_hybrid_cores.sh`): run it **once** from the MiSTer's `Scripts` menu. It starts the game whenever the core is loaded, keeps running after a reboot, and serves all our hybrid cores. Every hybrid core brings the launcher along and the newest version is the one that runs, so it never has to be run again after an update. Without it the core only shows the MiSTer logo.
 - **Game data**, which is not included: `SW.GRP` of Shadow Warrior 1.2, from the original CD or from *Shadow Warrior Classic Complete* / *Classic Redux* (GOG, Steam), or of the shareware version. The addons *Wanton Destruction* (`WT.GRP`) and *Twin Dragon* (`TD.GRP`) are optional.
 
 ## Installation
@@ -33,9 +35,11 @@ The game's log is in `/media/fat/logs/jfSW/jfsw.log`. Settings (`sw.cfg`) and sa
 | Option | |
 |---|---|
 | Aspect ratio, Scale, Scandoubler Fx, Stereo Mix | as in other cores |
-| Resolution | what the game renders and the core puts out, always at 15kHz: **320x200** (default, as the original) or **640x200**, the same 200 lines with twice the detail across: every pixel of the original becomes two, so the picture has the same size and shape on the screen. Applies at once in the game and its menu |
-| L. Stick Sensitivity, R. Stick Sensitivity | how fast the gamepad's left stick (walk, strafe) and right stick (turn, look) move the player, 25% to 300%. They multiply the scale of each axis set in the game's own menu and apply at once |
-| Limit Vertical Look | how far the view tilts up and down. The Build engine does not turn the camera, it shifts the picture, which distorts it the further you look up or down. **Off** (default) is the game's own range, **Half**, **Third** and **Quarter** leave that part of it in both directions. It holds for the keys, the mouse and the gamepad alike |
+| HDMI Only | **Yes** if no CRT is connected: resolutions of 640x400 and more are then progressive instead of interlaced, and the analog output is switched off while one is shown, so that a 15kHz screen can never get such a signal. This game has no such resolution, so nothing changes. Not there with `direct_video=1` |
+| CRT Options | for a 15kHz screen: *Horizontal Size*, *Horizontal Pos* and *Vertical Pos* fit the picture to it. The pixels stay as they are; HDMI is not affected. Not there with `forced_scandoubler=1` |
+| Resolution | what the game renders and the core puts out, always at 15kHz: **320x200** (default, as the original), **640x200**, **320x240** or **640x240**. 640 across is twice the detail in the same place: every pixel becomes two. 240 lines are square pixels at 320 across. The artwork is never stretched. Applies at once in the game and its menu |
+| L. Stick Sensitivity, R. Stick Sensitivity | how fast the gamepad's left stick (walk, strafe) and right stick (turn, look) move the player, 25% to 300%. At 100% a full tilt walks and turns about as fast as the keys do when running. They apply at once and take the place of the axis scale in the game's own menu |
+| Limit Vertical Look | how far the view tilts up and down. The Build engine does not turn the camera, it shifts the picture, which distorts it the further you look up or down. **Off** (default) is the game's own range, **On** leaves half of it in both directions. It holds for the keys, the mouse and the gamepad alike |
 | Menu OK, Menu Back | the gamepad button that confirms / goes back in the game's menus, whatever it does in the game. **MiSTer** (default) uses the OK/Back buttons of your MiSTer menu |
 
 ## Controls
@@ -45,7 +49,7 @@ The game's log is in `/media/fat/logs/jfSW/jfsw.log`. Settings (`sw.cfg`) and sa
 | Key | Action |
 |---|---|
 | Up, down | Walk forward, back |
-| Left, right (or mouse) | Turn |
+| Left, right (or mouse) | Turn. Moving the mouse up and down looks up and down |
 | Alt (or right mouse button) | Strafe: hold to sidestep with left and right. `,` and `.` sidestep directly |
 | Ctrl (or left mouse button) | Fire |
 | Space | Open, use |
@@ -57,7 +61,7 @@ The game's log is in `/media/fat/logs/jfSW/jfsw.log`. Settings (`sw.cfg`) and sa
 | Tab | Map |
 | Esc | Menu |
 
-These are the keys of the original game. *Options* in the game's menu changes keys, mouse and gamepad assignments and has the mouse aiming switch; they are saved in `sw.cfg`.
+These are the keys of the original game. *Options* in the game's menu changes keys, mouse and gamepad assignments; they are saved in `sw.cfg`.
 
 - **Gamepad** (default mapping):
 
@@ -87,7 +91,7 @@ Shadow Warrior plays its music from the CD. This build plays the same tracks fro
 
 Shadow Warrior moves 40 times per second. A 15kHz picture a TV accepts has about 60 fields per second: the core shows 59.64. This build draws exactly one frame per field, with the game's clock taken from the field counter of the core instead of the system clock, and puts everything that moves between its last two positions for the time of that field, as the game does on any monitor that is faster than 40Hz.
 
-The game holds the full rate of one frame per field at both resolutions, 320x200 and 640x200, in the levels it was measured in.
+The game holds the full rate of one frame per field at 320x200 and 640x200, in the levels it was measured in.
 
 ## Building
 
@@ -122,6 +126,10 @@ The toolchain image (Debian bullseye, glibc 2.31 to match the MiSTer) is built f
   cd <data folder> && MISTER_HYBRID_SHM=/tmp/shm <repository>/build/host/jfsw
   ```
 - `touch /tmp/jfsw_nolaunch` on the MiSTer keeps the core loaded without starting the game, so you can start a development binary by hand (set `MISTER_HYBRID_CORE=jfSW`). `/tmp/danik_hybrid_cores.log` shows what the launcher daemon did.
+
+## Support
+
+If you enjoy this project, you can support my work on [Patreon](https://www.patreon.com/itsdanik).
 
 ## Credits
 

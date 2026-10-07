@@ -11,6 +11,8 @@ OUT=dist/jfSW_$(date +%Y%m%d)
 G=/media/fat/games/jfSW
 ssh "$HOST" "mkdir -p $G && rm -f /media/fat/_Other/jfSW_*.rbf"
 # a running game keeps its binary busy: copy next to it, then swap
+# (scp would copy into a folder of that name, if something left one behind)
+ssh "$HOST" "rm -rf $G/jfSW.new"
 scp -q "$OUT/games/jfSW/jfSW" "$HOST:$G/jfSW.new"
 ssh "$HOST" "mv -f $G/jfSW.new $G/jfSW"
 # everything else of the package (user files on the MiSTer are left alone)
