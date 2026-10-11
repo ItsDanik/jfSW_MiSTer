@@ -27,8 +27,9 @@ Install
   3. Copy the game data to /media/fat/games/jfSW/
        SW.GRP
        Track02.ogg ... Track14.ogg, the music (the audio of the game's
-         CD), there or in a folder "music". Without them the game is
-         silent but for its sound effects.
+         CD), there or in a folder "music". Without them the full
+         game has no music, only its sound effects. The shareware
+         version needs none: its music is in its SW.GRP.
        optional: WT.GRP and TD.GRP, there or in a folder "addons". With
          more than one game in the folder, a list to pick from comes up
          when the core is loaded. Twin Dragon needs SW.GRP as well.
@@ -81,25 +82,28 @@ OSD options
 
 Controls
   Keyboard and mouse:
-    Up, down                            Walk forward, back
-    Left, right (or mouse)              Turn
+    W, S (or up, down)                  Walk forward, back
+    A, D                                Sidestep left, right
+    Mouse (or left, right)              Turn
     Mouse up, down                      Look up, down
-    Alt (or right mouse button)         Strafe: hold to sidestep with
-                                        left and right (, and . sidestep
-                                        directly)
-    Ctrl (or left mouse button)         Fire
-    Space                               Open, use
+    Left mouse button (or right Ctrl)   Fire
+    E (or right mouse button)           Open, use
+    Space                               Jump
+    Left Ctrl                           Crouch
     Shift                               Run (Caps Lock: always run)
-    A, Z                                Jump, crouch
     1 - 0                               Weapons
-    Enter, [, ]                         Use the inventory item, previous
+    R, Q (or mouse wheel)               Next, previous weapon
+    F (or Enter), [, ]                  Use the inventory item, previous
                                         and next item
     Page Up, Page Down, Home, End       Look and aim up and down
     Tab                                 Map
     Esc                                 Menu
-    These are the keys of the original game. "Options" in the game's
-    menu changes keys, mouse and gamepad assignments; they are saved in
-    sw.cfg.
+    This is a modern scheme, the default of this build; with the arrows
+    and the right Ctrl the game can be played on a keyboard alone.
+    "Options" in the game's menu changes keys, mouse and gamepad
+    assignments, and has the keys of the original game ("Apply Classic
+    Defaults"). They are saved in sw.cfg, so a sw.cfg from an earlier
+    release keeps its keys until "Apply Modern Defaults" is chosen there.
   Gamepad (default mapping):
     Left stick                          Walk and strafe
     Right stick                         Turn, look up and down
@@ -121,11 +125,14 @@ Controls
   letter, right adds a letter, left removes one, Menu OK confirms.
 
 Music
-  Shadow Warrior plays its music from the CD. This build plays the same
+  The full game plays its music from the CD. This build plays the same
   tracks from Ogg Vorbis files named Track02.ogg to Track14.ogg (track 1
   of the CD is the data). Classic Redux comes with them; from an original
-  CD, rip the audio tracks and encode them. The MIDI music of the
-  shareware version is not played.
+  CD, rip the audio tracks and encode them.
+  The shareware version has no CD: its music is MIDI. This build plays it
+  as an AdLib or Sound Blaster card did, on an FM chip (a YM3812) in the
+  FPGA core, with the game's own instruments. The game's Music Volume
+  sets its level. It needs the core (.rbf) of the same release.
 
 Files
   /media/fat/games/jfSW/sw.cfg       settings
@@ -140,6 +147,10 @@ Credits
   // "Build Engine & Tools" Copyright (c) 1993-1997 Ken Silverman
   // Ken Silverman's official web site: "http://www.advsys.net/ken"
   // See the included license file "BUILDLIC.TXT" for license info.
+  Apogee Sound System by James R. Dose: its AdLib MIDI driver, in the
+  form EDuke32 keeps it in, plays the music on the FM chip.
+  JTOPL by Jose Tejada (jotego), https://github.com/jotego/jtopl: the FM
+  chip in the core.
   libogg and libvorbis by the Xiph.Org Foundation.
   SDL by Sam Lantinga and contributors.
   MiSTer by Sorgelig and the MiSTer-devel contributors.
@@ -156,6 +167,6 @@ License
   libogg, libvorbis: BSD (LICENSE-vorbis.txt)
   SDL: zlib (LICENSE-sdl.txt)
   The launcher scripts: GPL-3.0 (LICENSE-gpl3.txt)
-  The FPGA core: GPL-2.0
+  The FPGA core: GPL-2.0, the FM chip in it (JTOPL): GPL-3.0
   Source: https://github.com/ItsDanik/jfSW_MiSTer
           https://github.com/ItsDanik/Hybrid_MiSTer (launcher, framework)

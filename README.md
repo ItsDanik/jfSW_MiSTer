@@ -2,7 +2,7 @@
 
 Shadow Warrior on [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) as a hybrid core.
 
-The game is [JFShadowWarrior](https://github.com/jonof/jfsw), Jonathon Fowler's port of 3D Realms' Shadow Warrior (1997) on his port of Ken Silverman's Build engine, with the engine's classic software renderer. It runs on the MiSTer's ARM CPU. The jfSW FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200, 640x200, 320x240 or 640x240, 44.1kHz audio and keyboard, mouse and gamepad input. The two halves talk through shared DDR3 memory.
+The game is [JFShadowWarrior](https://github.com/jonof/jfsw), Jonathon Fowler's port of 3D Realms' Shadow Warrior (1997) on his port of Ken Silverman's Build engine, with the engine's classic software renderer. It runs on the MiSTer's ARM CPU. The jfSW FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200, 640x200, 320x240 or 640x240, 44.1kHz audio, an FM chip for the AdLib music of the shareware version, and keyboard, mouse and gamepad input. The two halves talk through shared DDR3 memory.
 
 > **Beta.** Expect rough edges and please report problems in the issues.
 
@@ -21,7 +21,7 @@ Disclaimer: AI is being used to speed up development of this project.
    - `Scripts/danik_hybrid_cores.sh`, the launcher (from [Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer), which can also keep it up to date through `update_all`)
 2. Copy the game data to `/media/fat/games/jfSW/`:
    - `SW.GRP`
-   - the music, which is the audio of the game's CD: `Track02.ogg` to `Track14.ogg`, there or in a folder `music`. Without them the game is silent but for its sound effects (see [Music](#music)).
+   - the music, which is the audio of the game's CD: `Track02.ogg` to `Track14.ogg`, there or in a folder `music`. Without them the full game has no music, only its sound effects (see [Music](#music)). The shareware version needs none: its music is in its `SW.GRP`.
    - optional: `WT.GRP` and `TD.GRP`, there or in a folder `addons`. With more than one game in the folder, a list to pick from comes up when the core is loaded. Twin Dragon needs `SW.GRP` as well.
 
    The whole folder of *Shadow Warrior Classic Redux* (the one with `SW.GRP`, `addons` and `classic`) can be copied as it is: the addons and the music (`classic/MUSIC`) are found in it.
@@ -48,20 +48,22 @@ The game's log is in `/media/fat/logs/jfSW/jfsw.log`. Settings (`sw.cfg`) and sa
 
 | Key | Action |
 |---|---|
-| Up, down | Walk forward, back |
-| Left, right (or mouse) | Turn. Moving the mouse up and down looks up and down |
-| Alt (or right mouse button) | Strafe: hold to sidestep with left and right. `,` and `.` sidestep directly |
-| Ctrl (or left mouse button) | Fire |
-| Space | Open, use |
+| W, S (or up, down) | Walk forward, back |
+| A, D | Sidestep left, right |
+| Mouse (or left, right) | Turn. Moving the mouse up and down looks up and down |
+| Left mouse button (or right Ctrl) | Fire |
+| E (or right mouse button) | Open, use |
+| Space | Jump |
+| Left Ctrl | Crouch |
 | Shift | Run (Caps Lock: always run) |
-| A, Z | Jump, crouch |
 | 1 - 0 | Weapons |
-| Enter, `[`, `]` | Use the inventory item, previous and next item |
+| R, Q (or mouse wheel) | Next, previous weapon |
+| F (or Enter), `[`, `]` | Use the inventory item, previous and next item |
 | Page Up, Page Down, Home, End | Look and aim up and down |
 | Tab | Map |
 | Esc | Menu |
 
-These are the keys of the original game. *Options* in the game's menu changes keys, mouse and gamepad assignments; they are saved in `sw.cfg`.
+This is a modern scheme, the default of this build; with the arrows and the right Ctrl the game can be played on a keyboard alone. *Options* in the game's menu changes keys, mouse and gamepad assignments, and has the keys of the original game (*Apply Classic Defaults*: arrows, Ctrl fires, Space opens, A and Z jump and crouch). They are saved in `sw.cfg`, so a `sw.cfg` from an earlier release keeps its keys until *Apply Modern Defaults* is chosen there.
 
 - **Gamepad** (default mapping):
 
@@ -85,7 +87,9 @@ Naming a saved game without a keyboard: up/down changes the last letter, right a
 
 ## Music
 
-Shadow Warrior plays its music from the CD. This build plays the same tracks from Ogg Vorbis files named `Track02.ogg` to `Track14.ogg` (track 1 of the CD is the data). *Classic Redux* comes with them; from an original CD, rip the audio tracks and encode them. The MIDI music of the shareware version is not played: there is no synthesizer in this build.
+**The full game** plays its music from the CD. This build plays the same tracks from Ogg Vorbis files named `Track02.ogg` to `Track14.ogg` (track 1 of the CD is the data). *Classic Redux* comes with them; from an original CD, rip the audio tracks and encode them.
+
+**The shareware version** has no CD: its music is MIDI, written for the sound cards of 1997. This build plays it as an AdLib or Sound Blaster card did, on an FM chip: a YM3812 (OPL2) in the FPGA core, [JTOPL](https://github.com/jotego/jtopl). The game runs the AdLib driver of the original (the Apogee Sound System's, with the game's own instruments from `swtimbr.tmb`) and sends the core the chip's register writes, each with the audio sample it is due at; the chip's sound is made in the FPGA and mixed with the game's. The game's *Music Volume* sets its level. It needs the core of the same release: with an older `.rbf` the shareware version stays without music.
 
 ## Frame pacing
 
@@ -113,7 +117,7 @@ The toolchain image (Debian bullseye, glibc 2.31 to match the MiSTer) is built f
 |---|---|
 | `hybrid/` | submodule: [ItsDanik/Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer), what all our hybrid cores share: the FPGA host module, the ARM side library, SDL2 drivers, the launcher (`danik_hybrid_cores.sh`), toolchain and conventions. See its README. |
 | `core/` | FPGA core, based on [Template_MiSTer](https://github.com/MiSTer-devel/Template_MiSTer): `jfSW.sv` (OSD and button names) around `hybrid/rtl/hybrid_host.sv` |
-| `jfsw/` | submodule: [ItsDanik/jfsw](https://github.com/ItsDanik/jfsw) branch `mister`, [JFShadowWarrior](https://github.com/jonof/jfsw) with the MiSTer changes (`CMakeLists.txt`, `src/mister_port.c` and a few `#ifdef MISTER_HYBRID`). Its own submodule `jfbuild/`, the Build engine ([ItsDanik/jfbuild](https://github.com/ItsDanik/jfbuild) branch `mister`), has the rest: video, clock and joystick in `src/sdlayer2.c` |
+| `jfsw/` | submodule: [ItsDanik/jfsw](https://github.com/ItsDanik/jfsw) branch `mister`, [JFShadowWarrior](https://github.com/jonof/jfsw) with the MiSTer changes (`CMakeLists.txt`, `src/mister_port.c` and a few `#ifdef MISTER_HYBRID`). Two of its own submodules have the rest: `jfbuild/`, the Build engine ([ItsDanik/jfbuild](https://github.com/ItsDanik/jfbuild) branch `mister`), with video, clock and joystick in `src/sdlayer2.c`, and `jfaudiolib/`, the sound library ([ItsDanik/jfaudiolib](https://github.com/ItsDanik/jfaudiolib) branch `mister`), with the MIDI driver for the core's FM chip in `src/driver_misterfm.c` |
 | `package/` | files shipped in the release next to the binary (`danik_hybrid_launch.sh`, README) |
 | `releases/` | release packages |
 
@@ -136,6 +140,8 @@ If you enjoy this project, you can support my work on [Patreon](https://www.patr
 - **[JFShadowWarrior](https://github.com/jonof/jfsw)**, **[JFBuild](https://github.com/jonof/jfbuild)**, JFAudioLib and JFMACT by Jonathon Fowler and contributors.
 - **Shadow Warrior** by 3D Realms Entertainment, who released its source code in 2005.
 - **Build engine** by Ken Silverman.
+- **Apogee Sound System** by James R. Dose: its AdLib MIDI driver, in the form [EDuke32](https://www.eduke32.com) keeps it in, is the one that plays the music on the FM chip.
+- **[JTOPL](https://github.com/jotego/jtopl)** by Jose Tejada (jotego): the FM chip in the core.
 - **[libogg and libvorbis](https://xiph.org)** by the Xiph.Org Foundation.
 - **[SDL](https://libsdl.org)** by Sam Lantinga and contributors.
 - **[MiSTer](https://github.com/MiSTer-devel)** by Sorgelig and the MiSTer-devel contributors: the framework and Template_MiSTer.
@@ -145,4 +151,4 @@ This project and its maintainers are in no way associated with or endorsed by 3D
 
 ## License
 
-The top-level scripts, tools and documentation are licensed under the [GPL-3.0](LICENSE). The components keep their own licenses: the shared framework in `hybrid/` is GPL-3.0 except where its files say otherwise, JFShadowWarrior is GPL-2.0-or-later (`jfsw/GPL.TXT`) and the Build engine in it is under Ken Silverman's Build license (`jfsw/jfbuild/buildlic.txt`: free of charge, no commercial use), libogg and libvorbis are BSD, SDL and the SDL drivers in `hybrid/sdl2` are zlib, the FPGA core and the MiSTer framework are GPL-2.0 (`core/LICENSE`, with the core's own sources GPL-2.0-or-later).
+The top-level scripts, tools and documentation are licensed under the [GPL-3.0](LICENSE). The components keep their own licenses: the shared framework in `hybrid/` is GPL-3.0 except where its files say otherwise, JFShadowWarrior is GPL-2.0-or-later (`jfsw/GPL.TXT`) and the Build engine in it is under Ken Silverman's Build license (`jfsw/jfbuild/buildlic.txt`: free of charge, no commercial use), libogg and libvorbis are BSD, SDL and the SDL drivers in `hybrid/sdl2` are zlib, the FPGA core and the MiSTer framework are GPL-2.0 (`core/LICENSE`, with the core's own sources GPL-2.0-or-later), JTOPL in it is GPL-3.0 (`hybrid/rtl/jtopl/LICENSE`).
