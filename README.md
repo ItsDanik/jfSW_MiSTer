@@ -1,6 +1,6 @@
 # jfSW for MiSTer
 
-Shadow Warrior on [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) as a hybrid core.
+Shadow Warrior and its addons Wanton Destruction and Twin Dragon on [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) as a hybrid port.
 
 The game is [JFShadowWarrior](https://github.com/jonof/jfsw), Jonathon Fowler's port of 3D Realms' Shadow Warrior (1997) on his port of Ken Silverman's Build engine, with the engine's classic software renderer. It runs on the MiSTer's ARM CPU. The jfSW FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200, 640x200, 320x240 or 640x240, 44.1kHz audio, an FM chip for the AdLib music of the shareware version, and keyboard, mouse and gamepad input. The two halves talk through shared DDR3 memory.
 
@@ -10,36 +10,48 @@ Disclaimer: AI is being used to speed up development of this project.
 
 ## Requirements
 
-- **danik_hybrid_cores**, the launcher that comes in the release zip (`Scripts/danik_hybrid_cores.sh`): run it **once** from the MiSTer's `Scripts` menu. It starts the game whenever the core is loaded, keeps running after a reboot, and serves all our hybrid cores. Every hybrid core brings the launcher along and the newest version is the one that runs, so it never has to be run again after an update. Without it the core only shows the MiSTer logo.
-- **Game data**, which is not included: `SW.GRP` of Shadow Warrior 1.2, from the original CD or from *Shadow Warrior Classic Complete* / *Classic Redux* (GOG, Steam), or of the shareware version. The addons *Wanton Destruction* (`WT.GRP`) and *Twin Dragon* (`TD.GRP`) are optional.
+- **danik_hybrid_ports**, the launcher (`Scripts/danik_hybrid_ports.sh`): run it **once** from the MiSTer's `Scripts` menu. It starts the game whenever its menu entry is loaded, keeps running after a reboot, and serves all our hybrid ports; its screen picks which ports and games to have, and can keep them up to date through `update_all`. It replaces `danik_hybrid_cores`, the launcher before it, and moves ports installed the old way (`games/jfSW/`) into the new folders by itself. Without it the core says "Game not running".
+- **Game data**, which is not included: `SW.GRP` of Shadow Warrior 1.2, from the original CD or from *Shadow Warrior Classic Complete* / *Classic Redux* (GOG, Steam), or of the shareware version. The addons *Wanton Destruction* (`WT.GRP`) and *Twin Dragon* (`TD.GRP`, which needs the full game's `SW.GRP` as well) are optional.
 
 ## Installation
 
+With `update_all` (Downloader 2.4 or newer, which update_all keeps up to date):
+
+1. Copy [`downloader_danik_hybrid_ports.ini`](https://raw.githubusercontent.com/ItsDanik/Hybrid_MiSTer/main/launcher/downloader_danik_hybrid_ports.ini) to the root of your SD card (`/media/fat`).
+2. Run `update_all`. That installs the launcher, **danik_hybrid_ports**, in `Scripts`.
+3. Run **danik_hybrid_ports** from the `Scripts` menu, tick the games you want and press *X: Apply*. They are installed, and update_all keeps them up to date.
+
+By hand:
+
 1. Download the newest `jfSW_YYYYMMDD.zip` from [releases](releases/) and extract it to the root of your SD card (`/media/fat`). That gives you:
-   - `_Other/jfSW_YYYYMMDD.rbf`, the FPGA core
-   - `games/jfSW/`, the game binary and its launcher
-   - `Scripts/danik_hybrid_cores.sh`, the launcher (from [Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer), which can also keep it up to date through `update_all`)
-2. Copy the game data to `/media/fat/games/jfSW/`:
+   - `_Other/dnk-Shadow Warrior.mgl`, `_Other/dnk-SW Wanton Destruction.mgl` and `_Other/dnk-SW Twin Dragon.mgl`, the games' entries in the `Other` menu
+   - `_Other/dnk/dnk-jfSW_YYYYMMDD.rbf`, the FPGA core
+   - `games/dnk/jfSW/`, the game binary and its launch script
+   - `Scripts/danik_hybrid_ports.sh`, the launcher (from [Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer))
+   - `downloader_danik_hybrid_ports.ini`, with which `update_all` keeps the ports up to date from then on
+2. Copy the game data to `/media/fat/games/dnk/jfSW/`:
    - `SW.GRP`
    - the music, which is the audio of the game's CD: `Track02.ogg` to `Track14.ogg`, there or in a folder `music`. Without them the full game has no music, only its sound effects (see [Music](#music)). The shareware version needs none: its music is in its `SW.GRP`.
-   - optional: `WT.GRP` and `TD.GRP`, there or in a folder `addons`. With more than one game in the folder, a list to pick from comes up when the core is loaded. Twin Dragon needs `SW.GRP` as well.
+   - optional: `WT.GRP` and `TD.GRP`, there or in a folder `addons`.
 
    The whole folder of *Shadow Warrior Classic Redux* (the one with `SW.GRP`, `addons` and `classic`) can be copied as it is: the addons and the music (`classic/MUSIC`) are found in it.
-3. Run **danik_hybrid_cores** from the `Scripts` menu, if you have not done so before (see Requirements).
-4. Load **jfSW** from the `Other` menu.
+3. Run **danik_hybrid_ports** from the `Scripts` menu, if you have not done so before (see Requirements).
+4. Load the game from the `Other` menu, e.g. **dnk-Shadow Warrior**.
 
-The game's log is in `/media/fat/logs/jfSW/jfsw.log`. Settings (`sw.cfg`) and saved games (`game0.sav` to `game9.sav`) are in `/media/fat/games/jfSW/`.
+The game files are known by their contents, whatever their names. The menu entry of Shadow Warrior starts the shareware when the full game is not there. When a game's files are missing, the core says which files to copy where. Each game keeps its own OSD settings and button mappings. The core file itself (`_Other/dnk/dnk-jfSW_*.rbf`, or from *Recent*) lists the games that are there to pick from; quitting a game then returns to the list. The game's log is in `/media/fat/logs/dnk/jfSW/jfsw.log`. Settings (`sw.cfg`) and saved games (`game0.sav` to `game9.sav`) are in `/media/fat/games/dnk/jfSW/`.
 
 ## OSD options
 
 | Option | |
 |---|---|
 | Aspect ratio, Scale, Scandoubler Fx, Stereo Mix | as in other cores |
+| FPS Counter | shows the pictures per second in the top left corner |
 | HDMI Only | **Yes** if no CRT is connected: resolutions of 640x400 and more are then progressive instead of interlaced, and the analog output is switched off while one is shown, so that a 15kHz screen can never get such a signal. This game has no such resolution, so nothing changes. Not there with `direct_video=1` |
-| CRT Options | for a 15kHz screen: *Horizontal Size*, *Horizontal Pos* and *Vertical Pos* fit the picture to it. The pixels stay as they are; HDMI is not affected. Not there with `forced_scandoubler=1` |
-| Resolution | what the game renders and the core puts out, always at 15kHz: **320x200** (default, as the original), **640x200**, **320x240** or **640x240**. 640 across is twice the detail in the same place: every pixel becomes two. 240 lines are square pixels at 320 across. The artwork is never stretched. Applies at once in the game and its menu |
+| CRT Options | for a 15kHz screen: *Horizontal Size*, *Horizontal Pos* and *Vertical Pos* fit the picture to it. The pixels stay as they are; HDMI is not affected. The size is for the game's picture: the core's own, with its messages, keeps its width. Not there with `forced_scandoubler=1`. *HUD (Bottom)*: in the 240-line resolutions, how many lines the status bar (or the mini bar) sits above the bottom edge of the screen, 0 to 24 (10 by default), so that a CRT's overscan does not hide it; greyed out at 200 lines |
+| Resolution | what the game renders and the core puts out, always at 15kHz: **320x200** (default, as the original), **640x200**, **320x240** or **640x240**. 640 across is twice the detail in the same place: every pixel becomes two. 240 lines are square pixels at 320 across: the view fills all of them, from the top edge to the bottom one, with the status bar drawn over it at the *HUD (Bottom)* margin and the weapon on top of the bar; the menus and pictures keep their 200 lines in the middle. The artwork is never stretched. Applies at once in the game and its menu |
 | L. Stick Sensitivity, R. Stick Sensitivity | how fast the gamepad's left stick (walk, strafe) and right stick (turn, look) move the player, 25% to 300%. At 100% a full tilt walks and turns about as fast as the keys do when running. They apply at once and take the place of the axis scale in the game's own menu |
-| Limit Vertical Look | how far the view tilts up and down. The Build engine does not turn the camera, it shifts the picture, which distorts it the further you look up or down. **Off** (default) is the game's own range, **On** leaves half of it in both directions. It holds for the keys, the mouse and the gamepad alike |
+| Limit Vertical Look | how far the view tilts up and down. The Build engine does not turn the camera, it shifts the picture, which distorts it the further you look up or down. **On** (default) leaves half of the game's own range in both directions, **Off** is the whole range. It holds for the keys, the mouse and the gamepad alike |
+| Cheats | **God Mode**: nothing hurts you while it is on. **No Clipping**: you walk through walls while it is on. **Give All**: every weapon with full ammo, armor, the inventory items and all keys, once each time it is selected. **Next Level**: the level counts as completed, as at its exit, and the next one starts (not on the last level) |
 | Menu OK, Menu Back | the gamepad button that confirms / goes back in the game's menus, whatever it does in the game. **MiSTer** (default) uses the OK/Back buttons of your MiSTer menu |
 
 ## Controls
@@ -115,10 +127,10 @@ The toolchain image (Debian bullseye, glibc 2.31 to match the MiSTer) is built f
 
 | Path | |
 |---|---|
-| `hybrid/` | submodule: [ItsDanik/Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer), what all our hybrid cores share: the FPGA host module, the ARM side library, SDL2 drivers, the launcher (`danik_hybrid_cores.sh`), toolchain and conventions. See its README. |
+| `hybrid/` | submodule: [ItsDanik/Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer), what all our hybrid ports share: the FPGA host module, the ARM side library, SDL2 drivers, the launcher (`danik_hybrid_ports.sh`), toolchain and conventions. See its README. |
 | `core/` | FPGA core, based on [Template_MiSTer](https://github.com/MiSTer-devel/Template_MiSTer): `jfSW.sv` (OSD and button names) around `hybrid/rtl/hybrid_host.sv` |
 | `jfsw/` | submodule: [ItsDanik/jfsw](https://github.com/ItsDanik/jfsw) branch `mister`, [JFShadowWarrior](https://github.com/jonof/jfsw) with the MiSTer changes (`CMakeLists.txt`, `src/mister_port.c` and a few `#ifdef MISTER_HYBRID`). Two of its own submodules have the rest: `jfbuild/`, the Build engine ([ItsDanik/jfbuild](https://github.com/ItsDanik/jfbuild) branch `mister`), with video, clock and joystick in `src/sdlayer2.c`, and `jfaudiolib/`, the sound library ([ItsDanik/jfaudiolib](https://github.com/ItsDanik/jfaudiolib) branch `mister`), with the MIDI driver for the core's FM chip in `src/driver_misterfm.c` |
-| `package/` | files shipped in the release next to the binary (`danik_hybrid_launch.sh`, README) |
+| `package/` | files shipped in the release next to the binary (`danik_hybrid_launch.sh`, README), and `games.txt`: the games and their menu entries |
 | `releases/` | release packages |
 
 ### Development notes
@@ -129,7 +141,8 @@ The toolchain image (Debian bullseye, glibc 2.31 to match the MiSTer) is built f
   build/host/fakecore /tmp/shm script.txt audio.raw &
   cd <data folder> && MISTER_HYBRID_SHM=/tmp/shm <repository>/build/host/jfsw
   ```
-- `touch /tmp/jfsw_nolaunch` on the MiSTer keeps the core loaded without starting the game, so you can start a development binary by hand (set `MISTER_HYBRID_CORE=jfSW`). `/tmp/danik_hybrid_cores.log` shows what the launcher daemon did.
+- `MISTER=root@<address> tools/test_on_mister.sh SW` tries the build on a MiSTer next to what is installed there, without installing it: from `/tmp`, with the installed game's folder mirrored there (what the game writes stays in `/tmp`) and its own OSD settings. `WT`, `TD` for the addons, `list` and `nodata` for the core started by itself and without data, `log` for the game's log, `stop` to remove all of it again.
+- `touch /tmp/jfsw_nolaunch` on the MiSTer keeps the core loaded without starting the game, so you can start a development binary by hand (set `MISTER_HYBRID_CORE=jfSW`, and `MISTER_HYBRID_SET` for a game's set name, e.g. `jfSW_WT`). `/tmp/danik_hybrid_ports.log` shows what the launcher daemon did.
 
 ## Support
 

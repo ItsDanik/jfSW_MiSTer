@@ -1,0 +1,9 @@
+# The games of this core, a line each: <id>|<title> (hybrid/README.md,
+# "Several games in one core"). Each is a menu entry, _Other/dnk-<title>.mgl;
+# with several, its set name is jfSW_<id> (short: 31 characters at most in
+# all). The same lines are in the catalogue of hybrid/launcher/danik_hybrid_ports.sh.
+# The shareware has no entry: Shadow Warrior's starts it when the full game is
+# not there.
+SW|Shadow Warrior
+WT|SW: Wanton Destruction
+TD|SW: Twin Dragon

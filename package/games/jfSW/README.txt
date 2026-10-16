@@ -1,5 +1,5 @@
-jfSW for MiSTer - Shadow Warrior as a hybrid core
-====================================================
+jfSW for MiSTer - Shadow Warrior and its addons as a hybrid port
+================================================================
 
 The game (JFShadowWarrior, Jonathon Fowler's port of 3D Realms' Shadow
 Warrior) runs on the MiSTer's ARM CPU; the jfSW FPGA core provides native
@@ -9,59 +9,77 @@ audio and input.
 Disclaimer: AI is being used to speed up development of this project.
 
 Requirements
-  - danik_hybrid_cores, the launcher that comes with this release
-    (Scripts/danik_hybrid_cores.sh): copy it to /media/fat/Scripts/ and run
-    it ONCE from the MiSTer's Scripts menu. It starts the game whenever
-    the core is loaded, keeps running after a reboot, and serves all our
-    hybrid cores. Every hybrid core brings the launcher along and the
-    newest version is the one that runs, so it never has to be run again
-    after an update. Without it the core only shows the MiSTer logo.
+  - danik_hybrid_ports, the launcher that comes with this release
+    (Scripts/danik_hybrid_ports.sh): run it ONCE from the MiSTer's Scripts
+    menu. It starts the game whenever its menu entry is loaded, keeps
+    running after a reboot, and serves all our hybrid ports; its screen
+    picks which ports and games to have, and can keep them up to date
+    through update_all. It replaces danik_hybrid_cores, the launcher before
+    it, and moves ports installed the old way (games/jfSW/) into the new
+    folders by itself. Without it the core says "Game not running".
   - Game data. It is not included: SW.GRP of Shadow Warrior 1.2, from the
     original CD or from Shadow Warrior Classic Complete / Classic Redux
     (GOG, Steam), or of the shareware version. The addons Wanton
-    Destruction (WT.GRP) and Twin Dragon (TD.GRP) are optional.
+    Destruction (WT.GRP) and Twin Dragon (TD.GRP, which needs the full
+    game's SW.GRP as well) are optional.
 
 Install
-  1. Copy _Other/jfSW_*.rbf to /media/fat/_Other/
-  2. Copy games/jfSW/ to /media/fat/games/jfSW/
-  3. Copy the game data to /media/fat/games/jfSW/
+  With update_all (Downloader 2.4 or newer): copy
+  downloader_danik_hybrid_ports.ini to /media/fat/, run update_all, run
+  danik_hybrid_ports from the Scripts menu, tick the games, X: Apply.
+  By hand:
+  1. Extract the zip to the root of the SD card (/media/fat): _Other/,
+     games/dnk/jfSW/, Scripts/ and downloader_danik_hybrid_ports.ini
+     (with which update_all keeps the ports up to date from then on).
+  2. Copy the game data to /media/fat/games/dnk/jfSW/
        SW.GRP
        Track02.ogg ... Track14.ogg, the music (the audio of the game's
          CD), there or in a folder "music". Without them the full
          game has no music, only its sound effects. The shareware
          version needs none: its music is in its SW.GRP.
-       optional: WT.GRP and TD.GRP, there or in a folder "addons". With
-         more than one game in the folder, a list to pick from comes up
-         when the core is loaded. Twin Dragon needs SW.GRP as well.
+       optional: WT.GRP and TD.GRP, there or in a folder "addons".
      The whole folder of Shadow Warrior Classic Redux (the one with
      SW.GRP, "addons" and "classic") can be copied as it is: the addons
      and the music (classic/MUSIC) are found in it.
-  4. Run danik_hybrid_cores from the Scripts menu, if you have not done so
+  3. Run danik_hybrid_ports from the Scripts menu, if you have not done so
      before (see Requirements).
-  5. Load jfSW from the Other menu.
+  4. Load the game from the Other menu, e.g. dnk-Shadow Warrior.
+
+The game files are known by their contents, whatever their names. The menu
+entry of Shadow Warrior starts the shareware when the full game is not
+there. When a game's files are missing, the core says which files to copy
+where. Each game keeps its own OSD settings and button mappings. The core
+file itself (_Other/dnk/dnk-jfSW_*.rbf, or from Recent) lists the games
+that are there to pick from; quitting a game then returns to the list.
 
 OSD options
   Aspect ratio, Scale, Scandoubler Fx, Stereo Mix as in other cores.
-  HDMI Only     Yes if no CRT is connected: resolutions of 640x400 and
-                more are then progressive instead of interlaced, and the
-                analog output is switched off while one is shown, so that a
-                15kHz screen can never get such a signal. This game has no
-                such resolution, so nothing changes. Not there with
+  FPS Counter   shows the pictures per second in the top left corner.
+  HDMI Only     Yes if no CRT is connected: resolutions of 640x400 and more
+                are then progressive instead of interlaced, and the analog
+                output is switched off while one is shown, so that a 15kHz
+                screen can never get such a signal. This game has no such
+                resolution, so nothing changes. Not there with
                 direct_video=1.
   CRT Options   for a 15kHz screen: Horizontal Size, Horizontal Pos and
                 Vertical Pos fit the picture to it. The pixels stay as they
-                are; HDMI is not affected. Not there with
-                forced_scandoubler=1.
+                are; HDMI is not affected. The size is for the game's
+                picture: the core's own, with its messages, keeps its
+                width. Not there with forced_scandoubler=1. HUD (Bottom):
+                in the 240-line resolutions, how many lines the status bar
+                (or the mini bar) sits above the bottom edge of the screen,
+                0 to 24 (10 by default), so that a CRT's overscan does not
+                hide it; greyed out at 200 lines.
   Resolution    what the game renders and the core puts out, always at
-                15kHz: 320x200 (default, as the original), 640x200,
-                320x240 or 640x240. 640 across is twice the detail in the
-                same place. 240 lines are square pixels at 320 across:
-                the 3D view gets a fifth more lines, while everything
-                that was drawn for 200 lines keeps its pixels. Menus and
-                full screen pictures are in the middle of the screen with
-                20 black lines above and below, the status bar and the
-                weapon are at the bottom, never stretched.
-                Applies at once in the game and its menu.
+                15kHz: 320x200 (default, as the original), 640x200, 320x240
+                or 640x240. 640 across is twice the detail in the same
+                place. 240 lines are square pixels at 320 across: the 3D
+                view fills all of them, from the top edge to the bottom
+                one, with the status bar drawn over it at the HUD (Bottom)
+                margin and the weapon on top of the bar. Menus and full
+                screen pictures are in the middle of the screen with 20
+                black lines above and below, never stretched. Applies at
+                once in the game and its menu.
   L. Stick Sensitivity, R. Stick Sensitivity
                 how fast the gamepad's left stick (walk, strafe) and right
                 stick (turn, look) move the player, 25% to 300%. At 100% a
@@ -71,10 +89,16 @@ OSD options
   Limit Vertical Look
                 how far the view tilts up and down. The Build engine
                 shifts the picture instead of turning the camera, which
-                distorts it the further you look up or down. Off (default)
-                is the game's own range; On leaves half of it in both
-                directions, for the keys, the mouse and the gamepad
-                alike.
+                distorts it the further you look up or down. On
+                (default) leaves half of the game's own range in both
+                directions; Off is the whole range. For the keys, the
+                mouse and the gamepad alike.
+  Cheats        God Mode: nothing hurts you while it is on. No Clipping:
+                you walk through walls while it is on. Give All: every
+                weapon with full ammo, armor, the inventory items and all
+                keys, once each time it is selected. Next Level: the level
+                counts as completed, as at its exit, and the next one
+                starts (not on the last level).
   Menu OK, Menu Back
                 the gamepad button that confirms / goes back in the game's
                 menus, whatever it does in the game. MiSTer (default) uses
@@ -135,9 +159,9 @@ Music
   sets its level. It needs the core (.rbf) of the same release.
 
 Files
-  /media/fat/games/jfSW/sw.cfg       settings
-  /media/fat/games/jfSW/game*.sav    saved games
-  /media/fat/logs/jfSW/jfsw.log   the game's log
+  /media/fat/games/dnk/jfSW/sw.cfg      settings
+  /media/fat/games/dnk/jfSW/game*.sav    saved games
+  /media/fat/logs/dnk/jfSW/jfsw.log   the game's log
 
 Credits
   JFShadowWarrior, JFBuild, JFAudioLib and JFMACT by Jonathon Fowler and
