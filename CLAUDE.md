@@ -7,6 +7,7 @@
 - Name everywhere: `jfSW` (core, folders, release), `jfsw` (game submodule, binary in `build/`, log, lock).
 - The game is the `jfsw/` submodule, branch `mister`. Its MiSTer code is behind the `MISTER_HYBRID` build option.
 - Build: `./build.sh` (game), `./core/build_core.sh` (FPGA), `./package.sh` (zip in `dist/`), `MISTER=root@<address> tools/deploy.sh`.
+- Release: the zip in `releases/`. Players get it once it is published to the database, only when Danik asks: `hybrid/launcher/distribution.py publish ~/dnk_Distribution_MiSTer releases/jfSW_YYYYMMDD.zip` (the rule in `hybrid/CLAUDE.md`).
 - Try a build on the MiSTer without installing it: `MISTER=root@<address> tools/test_on_mister.sh SW|WT|TD|list|nodata|log|stop` (the rule in `hybrid/CLAUDE.md`).
 
 
