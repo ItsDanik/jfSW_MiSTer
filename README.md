@@ -29,7 +29,7 @@ By hand:
    - `games/dnk/jfSW/`, the game binary and its launch script
    - `Scripts/danik_hybrid_ports.sh`, the launcher (from [Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer))
    - `downloader_danik_hybrid_ports.ini`, with which `update_all` keeps the ports up to date from then on
-2. Copy the game data to `/media/fat/games/dnk/jfSW/`:
+2. Copy **everything** in the game's folder (the one with `SW.GRP`) to `/media/fat/games/dnk/jfSW/`, with its folders as they are, and leave nothing out (files the port does not use do no harm). The port finds in it:
    - `SW.GRP`
    - the music, which is the audio of the game's CD: `Track02.ogg` to `Track14.ogg`, there or in a folder `music`. Without them the full game has no music, only its sound effects (see [Music](#music)). The shareware version needs none: its music is in its `SW.GRP`.
    - optional: `WT.GRP` and `TD.GRP`, there or in a folder `addons`.
@@ -38,7 +38,9 @@ By hand:
 3. Run **danik_hybrid_ports** from the `Scripts` menu, if you have not done so before (see Requirements).
 4. Load the game from the `Other` menu, e.g. **dnk-Shadow Warrior**.
 
-The game files are known by their contents, whatever their names. The menu entry of Shadow Warrior starts the shareware when the full game is not there. When a game's files are missing, the core says which files to copy where. Each game keeps its own OSD settings and button mappings. The core file itself (`_Other/dnk/dnk-jfSW_*.rbf`, or from *Recent*) lists the games that are there to pick from; quitting a game then returns to the list. The game's log is in `/media/fat/logs/dnk/jfSW/jfsw.log`. Settings (`sw.cfg`) and saved games (`game0.sav` to `game9.sav`) are in `/media/fat/games/dnk/jfSW/`.
+The game data can go on a USB drive instead, into the same folder there (`/media/usb0/games/dnk/jfSW/`): the game looks for it there first, and then keeps its settings and saved games there as well. Everything else stays on the SD card.
+
+The game files are known by their contents, whatever their names. The menu entry of Shadow Warrior starts the shareware when the full game is not there. When a game's files are missing, the core says which files to copy where. Each game keeps its own OSD settings and button mappings. The core file itself (`_Other/dnk/dnk-jfSW_*.rbf`, or from *Recent*) lists the games that are there to pick from; quitting a game then returns to the list. The game's log is in `/media/fat/logs/dnk/jfSW/jfsw.log`. Settings (`sw.cfg`) and saved games (`game0.sav` to `game9.sav`) are in `/media/fat/games/dnk/jfSW/` (on the USB drive, if the game data is there).
 
 ## OSD options
 
@@ -52,7 +54,6 @@ The game files are known by their contents, whatever their names. The menu entry
 | L. Stick Sensitivity, R. Stick Sensitivity | how fast the gamepad's left stick (walk, strafe) and right stick (turn, look) move the player, 25% to 300%. At 100% a full tilt walks and turns about as fast as the keys do when running. They apply at once and take the place of the axis scale in the game's own menu |
 | Limit Vertical Look | how far the view tilts up and down. The Build engine does not turn the camera, it shifts the picture, which distorts it the further you look up or down. **On** (default) leaves half of the game's own range in both directions, **Off** is the whole range. It holds for the keys, the mouse and the gamepad alike |
 | Cheats | **God Mode**: nothing hurts you while it is on. **No Clipping**: you walk through walls while it is on. **Give All**: every weapon with full ammo, armor, the inventory items and all keys, once each time it is selected. **Next Level**: the level counts as completed, as at its exit, and the next one starts (not on the last level) |
-| Menu OK, Menu Back | the gamepad button that confirms / goes back in the game's menus, whatever it does in the game. **MiSTer** (default) uses the OK/Back buttons of your MiSTer menu |
 
 ## Controls
 
@@ -93,7 +94,9 @@ This is a modern scheme, the default of this build; with the arrows and the righ
 | Select | Map |
 | Start | Menu |
 
-Change the buttons in the OSD under *Define jfSW buttons*. *Menu OK* and *Menu Back* there are only needed for a button without a game function; MiSTer doesn't let you assign a button twice, so to confirm with a button that also has a game function, pick it in the OSD's Menu OK/Menu Back options instead.
+In the game's menus the buttons that confirm and go back are the ones of your MiSTer menu, whatever they do in the game: its *Menu OK* / *Menu Back* if you set them in *Define joystick buttons*, else its A / B. A controller never set up in MiSTer confirms and goes back as on its console: Cross / Circle on PlayStation, A / B on Xbox and on Nintendo.
+
+Change the buttons in the OSD under *Define jfSW buttons*. *Menu OK* and *Menu Back* there are only needed for a spare button without a game function. While the OSD is open, the game gets no input.
 
 Naming a saved game without a keyboard: up/down changes the last letter, right adds a letter, left removes one, Menu OK confirms.
 

@@ -90,13 +90,12 @@ localparam CONF_STR = {
 	"P2T[56],Give All;",
 	"P2T[57],Next Level;",
 	"-;",
-	"O[19:16],Menu OK,MiSTer,A,B,X,Y,L,R,Select,Start;",
-	"O[23:20],Menu Back,MiSTer,A,B,X,Y,L,R,Select,Start;",
-	"-;",
+	// Bits 16..23 were Menu OK / Menu Back up to host version 13: unused, a
+	// saved setting may still have them set.
 	// MiSTer's default map only knows the SNES-style pad. Main refuses to map a
 	// button twice, so Menu OK/Back here are for spare buttons without a game
-	// function and unmapped by default; the OSD Menu OK/Back options cover
-	// buttons that have one. The game knows this list in its order
+	// function and unmapped by default; menus also confirm and go back with
+	// the MiSTer menu's own OK / Back (MH_MenuButtons()). The game knows this list in its order
 	// (joystickdefaults_mister in jfsw/src/_functio.h), the launcher repeats
 	// "jn" as MISTER_HYBRID_JN (package/games/jfSW/danik_hybrid_launch.sh).
 	"J1,Fire,Open,Jump,Crouch,Next Weapon,Use Item,Map,Menu,Menu OK,Menu Back;",
@@ -200,6 +199,7 @@ hybrid_host host
 	.joy_l_analog_1(joy_l_analog_1),
 	.joy_r_analog_1(joy_r_analog_1),
 	.osd_status(status),
+	.osd_open(OSD_STATUS),
 	.ps2_key(ps2_key),
 	.ps2_mouse(ps2_mouse),
 	.ps2_mouse_ext(ps2_mouse_ext),
