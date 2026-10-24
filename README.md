@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/banner.png" alt="Shadow Warrior" width="100%"></p>
+
 # jfSW for MiSTer
 
 Shadow Warrior and its addons Wanton Destruction and Twin Dragon on [MiSTer FPGA](https://github.com/MiSTer-devel/Main_MiSTer/wiki) as a hybrid port.
@@ -5,13 +7,19 @@ Shadow Warrior and its addons Wanton Destruction and Twin Dragon on [MiSTer FPGA
 The game is [JFShadowWarrior](https://github.com/jonof/jfsw), Jonathon Fowler's port of 3D Realms' Shadow Warrior (1997) on his port of Ken Silverman's Build engine, with the engine's classic software renderer. It runs on the MiSTer's ARM CPU. The jfSW FPGA core provides native 15kHz video (CRT, VGA and HDMI) at 320x200, 640x200, 320x240 or 640x240, 44.1kHz audio, an FM chip for the AdLib music of the shareware version, and keyboard, mouse and gamepad input. The two halves talk through shared DDR3 memory.
 
 > **Beta.** Expect rough edges and please report problems in the issues.
+>
+> **Disclaimer:** AI is being extensively used to speed up development, but the project is well-maintained and supported.
 
-Disclaimer: AI is being used to speed up development of this project.
+<p align="center">
+  <img src="docs/screenshot1.png" alt="Shadow Warrior, the title screen" width="49%">
+  <img src="docs/screenshot2.png" alt="Shadow Warrior, the first level" width="49%">
+</p>
 
 ## Requirements
 
-- **danik_hybrid_ports**, the launcher (`Scripts/danik_hybrid_ports.sh`): run it **once** from the MiSTer's `Scripts` menu. It starts the game whenever its menu entry is loaded, keeps running after a reboot, and serves all our hybrid ports; its screen picks which ports and games to have, and can keep them up to date through `update_all`. It replaces `danik_hybrid_cores`, the launcher before it, and moves ports installed the old way (`games/jfSW/`) into the new folders by itself. Without it the core says "Game not running".
+- **danik_hybrid_ports**, the launcher (`Scripts/danik_hybrid_ports.sh`): run it **once** from the MiSTer's `Scripts` menu. It starts the game whenever its menu entry is loaded, keeps running after a reboot, and serves all our hybrid ports; its screen picks which ports and games to have, and can keep them up to date through `update_all`. Without it the core says "Game not running".
 - **Game data**, which is not included: `SW.GRP` of Shadow Warrior 1.2, from the original CD or from *Shadow Warrior Classic Complete* / *Classic Redux* (GOG, Steam), or of the shareware version. The addons *Wanton Destruction* (`WT.GRP`) and *Twin Dragon* (`TD.GRP`, which needs the full game's `SW.GRP` as well) are optional.
+- **Recommended:** a gamepad with two analog sticks and analog triggers, like an Xbox or PlayStation controller. A gamepad without them works but is not recommended. The game can also be played with a keyboard and mouse.
 
 ## Installation
 
@@ -20,25 +28,16 @@ With `update_all` (Downloader 2.4 or newer, which update_all keeps up to date):
 1. Copy [`downloader_danik_hybrid_ports.ini`](https://raw.githubusercontent.com/ItsDanik/Hybrid_MiSTer/main/launcher/downloader_danik_hybrid_ports.ini) to the root of your SD card (`/media/fat`).
 2. Run `update_all`. That installs the launcher, **danik_hybrid_ports**, in `Scripts`.
 3. Run **danik_hybrid_ports** from the `Scripts` menu, tick the games you want and press *X: Apply*. They are installed, and update_all keeps them up to date.
-
-By hand:
-
-1. Download the newest `jfSW_YYYYMMDD.zip` from [releases](releases/) and extract it to the root of your SD card (`/media/fat`). That gives you:
-   - `_Other/dnk-Shadow Warrior.mgl`, `_Other/dnk-SW Wanton Destruction.mgl` and `_Other/dnk-SW Twin Dragon.mgl`, the games' entries in the `Other` menu
-   - `_Other/dnk/dnk-jfSW_YYYYMMDD.rbf`, the FPGA core
-   - `games/dnk/jfSW/`, the game binary and its launch script
-   - `Scripts/danik_hybrid_ports.sh`, the launcher (from [Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer))
-   - `downloader_danik_hybrid_ports.ini`, with which `update_all` keeps the ports up to date from then on
-2. Copy **everything** in the game's folder (the one with `SW.GRP`) to `/media/fat/games/dnk/jfSW/`, with its folders as they are, and leave nothing out (files the port does not use do no harm). The port finds in it:
+4. Copy **everything** in the game's folder (the one with `SW.GRP`) to `/media/fat/games/dnk/jfSW/`, with its folders as they are, and leave nothing out (files the port does not use do no harm). The port finds in it:
    - `SW.GRP`
-   - the music, which is the audio of the game's CD: `Track02.ogg` to `Track14.ogg`, there or in a folder `music`. Without them the full game has no music, only its sound effects (see [Music](#music)). The shareware version needs none: its music is in its `SW.GRP`.
+   - the music, which is the audio of the game's CD: `Track02.ogg` to `Track14.ogg`, there or in a folder `music`. Without them the full game has no music, only its sound effects (see [NOTES.md](NOTES.md#music)). The shareware version needs none: its music is in its `SW.GRP`.
    - optional: `WT.GRP` and `TD.GRP`, there or in a folder `addons`.
 
    The whole folder of *Shadow Warrior Classic Redux* (the one with `SW.GRP`, `addons` and `classic`) can be copied as it is: the addons and the music (`classic/MUSIC`) are found in it.
-3. Run **danik_hybrid_ports** from the `Scripts` menu, if you have not done so before (see Requirements).
-4. Load the game from the `Other` menu, e.g. **dnk-Shadow Warrior**.
+5. Load the game from the `Other` menu, e.g. **dnk-Shadow Warrior**.
 
-The game data can go on a USB drive instead, into the same folder there (`/media/usb0/games/dnk/jfSW/`): the game looks for it there first, and then keeps its settings and saved games there as well. Everything else stays on the SD card.
+> [!NOTE]
+> The game data can go on a USB drive instead, into the same folder there (`/media/usb0/games/dnk/jfSW/`): the game looks for it there first, and then keeps its settings and saved games there as well. Everything else stays on the SD card.
 
 The game files are known by their contents, whatever their names. The menu entry of Shadow Warrior starts the shareware when the full game is not there. When a game's files are missing, the core says which files to copy where. Each game keeps its own OSD settings and button mappings. The core file itself (`_Other/dnk/dnk-jfSW_*.rbf`, or from *Recent*) lists the games that are there to pick from; quitting a game then returns to the list. The game's log is in `/media/fat/logs/dnk/jfSW/jfsw.log`. Settings (`sw.cfg`) and saved games (`game0.sav` to `game9.sav`) are in `/media/fat/games/dnk/jfSW/` (on the USB drive, if the game data is there).
 
@@ -48,14 +47,15 @@ The game files are known by their contents, whatever their names. The menu entry
 |---|---|
 | Aspect ratio, Scale, Scandoubler Fx, Stereo Mix | as in other cores |
 | FPS Counter | shows the pictures per second in the top left corner |
-| HDMI Only | **Yes** if no CRT is connected: resolutions of 640x400 and more are then progressive instead of interlaced, and the analog output is switched off while one is shown, so that a 15kHz screen can never get such a signal. This game has no such resolution, so nothing changes. Not there with `direct_video=1` |
-| CRT Options | for a 15kHz screen: *Horizontal Size*, *Horizontal Pos* and *Vertical Pos* fit the picture to it. The pixels stay as they are; HDMI is not affected. The size is for the game's picture: the core's own, with its messages, keeps its width. Not there with `forced_scandoubler=1`. *HUD (Bottom)*: in the 240-line resolutions, how many lines the status bar (or the mini bar) sits above the bottom edge of the screen, 0 to 24 (0 by default), so that a CRT's overscan does not hide it; greyed out at 200 lines. *HUD (Top)* is always greyed out: the game has nothing at the top edge |
-| Resolution | what the game renders and the core puts out, always at 15kHz: **320x200** (default, as the original), **640x200**, **320x240** or **640x240**. 640 across is twice the detail in the same place: every pixel becomes two. 240 lines are square pixels at 320 across: the view fills all of them, from the top edge to the bottom one, with the status bar drawn over it at the *HUD (Bottom)* margin and the weapon on top of the bar; the menus and pictures keep their 200 lines in the middle. The artwork is never stretched. Applies at once in the game and its menu |
-| L. Stick Sensitivity, R. Stick Sensitivity | how fast the gamepad's left stick (walk, strafe) and right stick (turn, look) move the player, 25% to 300%. At 100% a full tilt walks and turns about as fast as the keys do when running. They apply at once and take the place of the axis scale in the game's own menu |
-| Limit Vertical Look | how far the view tilts up and down. The Build engine does not turn the camera, it shifts the picture, which distorts it the further you look up or down. **On** (default) leaves half of the game's own range in both directions, **Off** is the whole range. It holds for the keys, the mouse and the gamepad alike |
-| Music | for the shareware version's music, which is MIDI (the full game's is the CD's, see [Music](#music)): **MIDI** (default), played by the core's synthesizer with a SoundFont, or by an MT32-pi when one is connected and on; **FM chip**: on the FM chip, as an AdLib card played it. *SoundFont*: **Default** is GeneralUser GS, which comes with the port (`games/dnk/SoundFonts/GeneralUser-GS.sf2`); 1 to 7 are your own `.sf2` files in that folder, in the order of their names, or as the MIDI Player core sets them. A SoundFont that is missing, damaged or too big (over 64 MB of samples) is said in the MiSTer's info box, and the music goes to the FM chip. Applies at once |
-| MT32-pi | only there while an MT32-pi answers on the user port: see [Music](#music) |
-| Cheats | **God Mode**: nothing hurts you while it is on. **No Clipping**: you walk through walls while it is on. **Give All**: every weapon with full ammo, armor, the inventory items and all keys, once each time it is selected. **Next Level**: the level counts as completed, as at its exit, and the next one starts (not on the last level) |
+| HDMI Only | as in the other hybrid ports, for resolutions of 640x400 and more: jfSW has none, so nothing changes here |
+| CRT Options | **Horizontal Size**: the picture's width<br>**Horizontal Pos**: moves it left or right<br>**Vertical Pos**: moves it up or down<br>**HUD (Top)**: always greyed out, the game has nothing at the top<br>**HUD (Bottom)**: lifts the status bar (or the mini bar) 0 to 24 lines off the bottom edge (default 0), at 240 lines<br><br>For a 15kHz screen: fits the picture to it and keeps the status bar out of the overscan. HDMI is not affected; not there with `forced_scandoubler=1` |
+| Resolution | **320x200**: as the original (default)<br>**640x200**: twice the detail across, same picture size<br>**320x240**: the view fills the whole screen<br>**640x240**: both<br><br>Always at 15kHz. With 240 lines the status bar is drawn over the view at the *HUD (Bottom)* margin; menus and pictures stay at 200 lines, centred, never stretched. Applies at once |
+| L. Stick Sensitivity, R. Stick Sensitivity | how fast the left stick (walk, strafe) and the right stick (turn, look) move the player, 25% to 300%. They apply at once and take the place of the axis scale in the game's own menu |
+| Limit Vertical Look | **On**: half of the game's own range up and down (default)<br>**Off**: the whole range<br><br>The Build engine shifts the picture instead of turning the camera, which distorts it the further you look up or down. For the keys, the mouse and the gamepad alike |
+| Music | **MIDI**: the core's synthesizer, or an MT32-pi when one is connected and on (default)<br>**FM chip**: as an AdLib card played it<br><br>For the shareware version's music, which is MIDI; the full game's is the CD's (see [NOTES.md](NOTES.md#music)). Applies at once |
+| SoundFont | **Default**: GeneralUser GS, which comes with the port<br>**1** to **7**: your own `.sf2` files in `games/dnk/SoundFonts/`, in the order of their names, or as the MIDI Player core sets them<br><br>A SoundFont that is missing, damaged or too big (over 64 MB of samples) is said in the MiSTer's info box, and the music goes to the FM chip |
+| MT32-pi | **MT32-pi**: On (default) or Off, the core's synthesizer as without it<br>**MT32-pi Synth**: SoundFont (default) or MT-32 (it needs the MT-32 ROMs on the Pi's card)<br>**MT32-pi ROM**: MT-32 v1, v2 or CM-32L<br>**MT32-pi SoundFont**: Pi's own (default) or one of the first eight on its card<br>**Reset Hanging Notes**: the Pi stops all its notes, the music goes on<br><br>Only there while an MT32-pi answers on the user port. Apply at once |
+| Cheats | **God Mode**: nothing hurts you<br>**No Clipping**: walk through walls<br>**Give All**: every weapon with full ammo, armor, the inventory items and all keys<br>**Next Level**: completes the level |
 | Save Diagnostic Report | the last line: see [If something is wrong](#if-something-is-wrong) |
 
 ## Controls
@@ -79,8 +79,6 @@ The game files are known by their contents, whatever their names. The menu entry
 | Tab | Map |
 | Esc | Menu |
 
-This is a modern scheme, the default of this build; with the arrows and the right Ctrl the game can be played on a keyboard alone. *Options* in the game's menu changes keys, mouse and gamepad assignments, and has the keys of the original game (*Apply Classic Defaults*: arrows, Ctrl fires, Space opens, A and Z jump and crouch). They are saved in `sw.cfg`, so a `sw.cfg` from an earlier release keeps its keys until *Apply Modern Defaults* is chosen there.
-
 - **Gamepad** (default mapping):
 
 | Button | Action |
@@ -97,27 +95,14 @@ This is a modern scheme, the default of this build; with the arrows and the righ
 | Select | Map |
 | Start | Menu |
 
-In the game's menus the buttons that confirm and go back are the ones of your MiSTer menu, whatever they do in the game: its *Menu OK* / *Menu Back* if you set them in *Define joystick buttons*, else its A / B. A controller never set up in MiSTer confirms and goes back as on its console: Cross / Circle on PlayStation, A / B on Xbox and on Nintendo.
-
 Change the buttons in the OSD under *Define jfSW buttons*. *Menu OK* and *Menu Back* there are only needed for a spare button without a game function. While the OSD is open, the game gets no input.
 
+> [!WARNING]
+> A button left without a name in *Define jfSW buttons* does not reach the game at all, except L2/R2, L3/R3 and *Menu OK* / *Menu Back*. Name every button there, or leave the definition as it is. To go back to the default buttons, delete `config/inputs/jfSW_*_input_*_v3.map` (each game has its own) on the SD card.
+
+The game's own menu can change what each gamepad button does: *Options*, *Input Menu*, *Controller Buttons Setup*. Change the actions there rather than in the OSD; a button the OSD leaves without a name never reaches the game, so its menu cannot bind it.
+
 Naming a saved game without a keyboard: up/down changes the last letter, right adds a letter, left removes one, Menu OK confirms.
-
-## Music
-
-**The full game** plays its music from the CD. This build plays the same tracks from Ogg Vorbis files named `Track02.ogg` to `Track14.ogg` (track 1 of the CD is the data). *Classic Redux* comes with them; from an original CD, rip the audio tracks and encode them.
-
-**The shareware version** has no CD: its music is MIDI, written for the sound cards of 1997. With the OSD's *Music* on **MIDI** (the default), the songs' General MIDI tracks are played by a SoundFont 2 synthesizer in the FPGA core, with GeneralUser GS, which comes with the port, or a SoundFont of your own (*SoundFont* 1 to 7, `.sf2` files in `games/dnk/SoundFonts/`). The game's *Music Volume* sets its level.
-
-With *Music* on **FM chip**, it plays as an AdLib or Sound Blaster card did, on a YM3812 (OPL2) in the FPGA core, [JTOPL](https://github.com/jotego/jtopl). The game runs the AdLib driver of the original (the Apogee Sound System's, with the game's own instruments from `swtimbr.tmb`) and sends the core the chip's register writes, each with the audio sample it is due at; the chip's sound is made in the FPGA and mixed with the game's. The music needs the core of the same release: with an older `.rbf` the shareware version stays without music.
-
-**With an [MT32-pi](https://github.com/dwhinham/mt32-pi)** on the MiSTer's user port (an MT32-pi board for the MiSTer, with the firmware's MiSTer support) and *Music* on MIDI, the shareware version's music goes to it instead of the synthesizer. The OSD then shows its lines (they are hidden while no MT32-pi answers): *MT32-pi* **On** (default) or **Off** (the core's synthesizer, as without it), *MT32-pi Synth* **SoundFont** (default) or **MT-32** (it needs the MT-32 ROMs on the MT32-pi's card), *MT32-pi ROM* (MT-32 v1, v2, CM-32L) and *MT32-pi SoundFont* (**Pi's own**, the default: the one the MT32-pi has, as set on it; or one of the first eight on its card, 0 to 7). A box names the synth each time it changes; *Reset Hanging Notes* makes the MT32-pi stop all its notes, and the music goes on (the SoundFont stays). All apply at once; the game's *Music Volume* sets its level.
-
-## Frame pacing
-
-Shadow Warrior moves 40 times per second. A 15kHz picture a TV accepts has about 60 fields per second: the core shows 59.64. This build draws exactly one frame per field, with the game's clock taken from the field counter of the core instead of the system clock, and puts everything that moves between its last two positions for the time of that field, as the game does on any monitor that is faster than 40Hz.
-
-The game holds the full rate of one frame per field at 320x200 and 640x200, in the levels it was measured in.
 
 ## If something is wrong
 
@@ -127,38 +112,7 @@ The report has the setup (versions, the video and audio lines of `MiSTer.ini`, t
 
 ## Building
 
-Everything builds in Docker on a Linux PC.
-
-```sh
-git clone --recursive https://github.com/ItsDanik/jfSW_MiSTer.git
-cd jfSW_MiSTer
-./build.sh              # ARM game binary  -> build/mister/jfsw
-./core/build_core.sh    # FPGA core (Quartus Lite 17.0.2) -> core/output_files/jfSW.rbf
-./package.sh            # release zip      -> dist/jfSW_YYYYMMDD.zip
-```
-
-The toolchain image (Debian bullseye, glibc 2.31 to match the MiSTer) is built from `hybrid/toolchain/` on first use. The first build also downloads and builds SDL2, SDL2_mixer and SDL2_net, and libogg and libvorbis for the music.
-
-### Repository layout
-
-| Path | |
-|---|---|
-| `hybrid/` | submodule: [ItsDanik/Hybrid_MiSTer](https://github.com/ItsDanik/Hybrid_MiSTer), what all our hybrid ports share: the FPGA host module, the ARM side library, SDL2 drivers, the launcher (`danik_hybrid_ports.sh`), toolchain and conventions. See its README. |
-| `core/` | FPGA core, based on [Template_MiSTer](https://github.com/MiSTer-devel/Template_MiSTer): `jfSW.sv` (OSD and button names) around `hybrid/rtl/hybrid_host.sv` |
-| `jfsw/` | submodule: [ItsDanik/jfsw](https://github.com/ItsDanik/jfsw) branch `mister`, [JFShadowWarrior](https://github.com/jonof/jfsw) with the MiSTer changes (`CMakeLists.txt`, `src/mister_port.c` and a few `#ifdef MISTER_HYBRID`). Two of its own submodules have the rest: `jfbuild/`, the Build engine ([ItsDanik/jfbuild](https://github.com/ItsDanik/jfbuild) branch `mister`), with video, clock and joystick in `src/sdlayer2.c`, and `jfaudiolib/`, the sound library ([ItsDanik/jfaudiolib](https://github.com/ItsDanik/jfaudiolib) branch `mister`), with the MIDI driver for the core's FM chip in `src/driver_misterfm.c` |
-| `package/` | files shipped in the release next to the binary (`danik_hybrid_launch.sh`, README), and `games.txt`: the games and their menu entries |
-| `releases/` | release packages |
-
-### Development notes
-
-- `./build.sh host` builds the same game for the PC. It runs against `hybrid/tools/fakecore`, a stand-in for the FPGA core that takes scripted input and saves screenshots and audio:
-  ```sh
-  gcc -O2 -o build/host/fakecore hybrid/tools/fakecore.c
-  build/host/fakecore /tmp/shm script.txt audio.raw &
-  cd <data folder> && MISTER_HYBRID_SHM=/tmp/shm <repository>/build/host/jfsw
-  ```
-- `MISTER=root@<address> tools/test_on_mister.sh SW` tries the build on a MiSTer next to what is installed there, without installing it: from `/tmp`, with the installed game's folder mirrored there (what the game writes stays in `/tmp`) and its own OSD settings. `WT`, `TD` for the addons, `list` and `nodata` for the core started by itself and without data, `log` for the game's log, `stop` to remove all of it again.
-- `touch /tmp/jfsw_nolaunch` on the MiSTer keeps the core loaded without starting the game, so you can start a development binary by hand (set `MISTER_HYBRID_CORE=jfSW`, and `MISTER_HYBRID_SET` for a game's set name, e.g. `jfSW_WT`). `/tmp/danik_hybrid_ports.log` shows what the launcher daemon did.
+How the port works, how to build it and notes for development: [NOTES.md](NOTES.md).
 
 ## Support
 
@@ -175,10 +129,10 @@ If you enjoy this project, you can support my work on [Patreon](https://www.patr
 - **[libogg and libvorbis](https://xiph.org)** by the Xiph.Org Foundation.
 - **[SDL](https://libsdl.org)** by Sam Lantinga and contributors.
 - **[MiSTer](https://github.com/MiSTer-devel)** by Sorgelig and the MiSTer-devel contributors: the framework and Template_MiSTer.
-- **[MiSTer Frontier](https://github.com/MiSTerOrganize/MiSTer_Frontier)** by MiSTer Organize: thank you for the inspiration. Hybrid cores on the MiSTer, and the way their game is launched (a daemon that watches the loaded core and runs a script from its games folder), come from MiSTer Frontier. Our launcher is a separate implementation and does not need MiSTer Frontier installed.
+- **[MiSTer Frontier](https://github.com/MiSTerOrganize/MiSTer_Frontier)** by MiSTer Organize: thank you for the inspiration. Hybrid cores on the MiSTer, and the way their game is launched (a daemon that watches the loaded core and runs a script from its games folder), were inspired by MiSTer Frontier.
 
 This project and its maintainers are in no way associated with or endorsed by 3D Realms, Devolver Digital or any other holder of rights in Shadow Warrior. It does not include any game data.
 
 ## License
 
-The top-level scripts, tools and documentation are licensed under the [GPL-3.0](LICENSE). The components keep their own licenses: the shared framework in `hybrid/` is GPL-3.0 except where its files say otherwise, JFShadowWarrior is GPL-2.0-or-later (`jfsw/GPL.TXT`) and the Build engine in it is under Ken Silverman's Build license (`jfsw/jfbuild/buildlic.txt`: free of charge, no commercial use), libogg and libvorbis are BSD, SDL and the SDL drivers in `hybrid/sdl2` are zlib, the FPGA core and the MiSTer framework are GPL-2.0 (`core/LICENSE`, with the core's own sources GPL-2.0-or-later), JTOPL in it is GPL-3.0 (`hybrid/rtl/jtopl/LICENSE`).
+The top-level scripts, tools and documentation are licensed under the [GPL-3.0](LICENSE). The components keep their own licenses: the part of the shared framework the game is linked with (`hybrid/hps/`) is GPL-2.0-or-later, the rest of `hybrid/` GPL-3.0 except where its files say otherwise, JFShadowWarrior is GPL-2.0-or-later (`jfsw/GPL.TXT`) and the Build engine in it is under Ken Silverman's Build license (`jfsw/jfbuild/buildlic.txt`: free of charge, no commercial use), libogg and libvorbis are BSD, SDL and the SDL drivers in `hybrid/sdl2` are zlib, the FPGA core and the MiSTer framework are GPL-2.0 (`core/LICENSE`, with the core's own sources GPL-2.0-or-later), JTOPL in it is GPL-3.0 (`hybrid/rtl/jtopl/LICENSE`).
