@@ -34,7 +34,7 @@ With `update_all` (Downloader 2.4 or newer, which update_all keeps up to date):
    - optional: `WT.GRP` and `TD.GRP`, there or in a folder `addons`.
 
    The whole folder of *Shadow Warrior Classic Redux* (the one with `SW.GRP`, `addons` and `classic`) can be copied as it is: the addons and the music (`classic/MUSIC`) are found in it.
-5. Load the game from the `Other` menu, e.g. **dnk-Shadow Warrior**.
+5. Load the game from the `Other` menu, e.g. **dnk-Shadow Warrior**, or from the `Hybrid Ports` folder if you moved the games there in the launcher.
 
 > [!NOTE]
 > The game data can go on a USB drive instead, into the same folder there (`/media/usb0/games/dnk/jfSW/`): the game looks for it there first, and then keeps its settings and saved games there as well. Everything else stays on the SD card.
