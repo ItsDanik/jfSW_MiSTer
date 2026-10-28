@@ -66,7 +66,7 @@ Run it from the `Scripts` menu again whenever you want to change something. Its 
 |---|---|
 | Aspect ratio, Scale, Scandoubler Fx, Stereo Mix | as in other cores |
 | FPS Counter | shows the pictures per second in the top left corner |
-| HDMI Only | as in the other hybrid ports, for resolutions of 640x400 and more: jfSW has none, so nothing changes here |
+| HDMI Only | **Yes** if no CRT is connected: resolutions of 640x400 and more are then progressive instead of interlaced, and so is the core's own screen before the game, which moves at 60 pictures a second for a CRT and shows fine lines on HDMI without it. The analog output is switched off while one is shown, so that a 15kHz screen can never get such a signal. jfSW has no such resolution, so nothing changes in the game. Not needed with `forced_scandoubler=1` (VGA monitor); not there with `direct_video=1` |
 | CRT Options | **Horizontal Size**: the picture's width<br>**Horizontal Pos**: moves it left or right<br>**Vertical Pos**: moves it up or down<br>**HUD (Top)**: always greyed out, the game has nothing at the top<br>**HUD (Bottom)**: lifts the status bar (or the mini bar) 0 to 24 lines off the bottom edge (default 0), at 240 lines<br><br>For a 15kHz screen: fits the picture to it and keeps the status bar out of the overscan. HDMI is not affected; not there with `forced_scandoubler=1` |
 | Resolution | **320x200**: as the original (default)<br>**640x200**: twice the detail across, same picture size<br>**320x240**: the view fills the whole screen<br>**640x240**: both<br><br>Always at 15kHz. With 240 lines the status bar is drawn over the view at the *HUD (Bottom)* margin; menus and pictures stay at 200 lines, centred, never stretched. Applies at once |
 | L. Stick Sensitivity, R. Stick Sensitivity | how fast the left stick (walk, strafe) and the right stick (turn, look) move the player, 25% to 300%. They apply at once and take the place of the axis scale in the game's own menu |
@@ -75,6 +75,7 @@ Run it from the `Scripts` menu again whenever you want to change something. Its 
 | SoundFont | **Default**: GeneralUser GS, which comes with the port<br>**1** to **7**: your own `.sf2` files in `games/dnk/SoundFonts/`, in the order of their names, or as the MIDI Player core sets them<br><br>A SoundFont that is missing, damaged or too big (over 64 MB of samples) is said in the MiSTer's info box, and the music goes to the FM chip |
 | MT32-pi | **MT32-pi**: On (default) or Off, the core's synthesizer as without it<br>**MT32-pi Synth**: SoundFont (default) or MT-32 (it needs the MT-32 ROMs on the Pi's card)<br>**MT32-pi ROM**: MT-32 v1, v2 or CM-32L<br>**MT32-pi SoundFont**: Pi's own (default) or one of the first eight on its card<br>**Reset Hanging Notes**: the Pi stops all its notes, the music goes on<br><br>Only there while an MT32-pi answers on the user port. Apply at once |
 | Cheats | **God Mode**: nothing hurts you<br>**No Clipping**: walk through walls<br>**Give All**: every weapon with full ammo, armor, the inventory items and all keys<br>**Next Level**: completes the level |
+| Reset | starts the game again from its beginning, as the USER button does |
 | Save Diagnostic Report | the last line: see [If something is wrong](#if-something-is-wrong) |
 
 ## Controls

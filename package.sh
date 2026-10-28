@@ -51,7 +51,8 @@ grep -v '^#' package/games.txt | grep '|' | while IFS='|' read -r id title; do
         > "$OUT/_Other/dnk-$file.mgl"
 done
 
-# the game
+# the game, and its games for the database's catalogue (the launcher's
+# screen offers what that has) and for the launcher without one
 cp -r package/games/jfSW/. "$G/"
 grep -v '^#' package/games.txt | grep '|' > "$G/games.txt"
 # each game's logo, shown at its start (host version 17, hybrid/docs/game_logo.md):
