@@ -7,3 +7,7 @@
 SW|Shadow Warrior
 WT|SW: Wanton Destruction
 TD|SW: Twin Dragon
+TEKWAR|TekWar
+WHAVEN|Witchaven
+WHAVEN2|Witchaven II
+CORR8|Corridor 8: Galactic Wars
