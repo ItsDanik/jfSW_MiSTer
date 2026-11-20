@@ -11,3 +11,4 @@ TEKWAR|TekWar
 WHAVEN|Witchaven
 WHAVEN2|Witchaven II
 CORR8|Corridor 8: Galactic Wars
+SKILANDER|Skilander
